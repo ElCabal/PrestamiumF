@@ -1,0 +1,58 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card card-outline card-primary w-50">
+        <div class="card-header text-center">
+            <a class="h1"><b>Prestamium</b></a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Inicia sesión para continuar</p>
+
+            <form action="../../index3.html" method="post">
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Correo electrónico">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder="Contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">
+                        Recuérdame
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <button [routerLink]="['/dashboard']" class="btn btn-primary btn-block">Iniciar sesión</button>
+                </div>
+            </form>
+
+            <!-- <div class="social-auth-links text-center mt-2 mb-3">
+                <a class="btn btn-block btn-primary">
+                    <i class="fab fa-facebook mr-2"></i> Iniciar sesión con Facebook
+                </a>
+                <a class="btn btn-block btn-danger">
+                    <i class="fab fa-google-plus mr-2"></i> Iniciar sesión con Google+
+                </a>
+            </div> -->
+
+            <p class="mb-1">
+                <a [routerLink]="['/auth/forgot-password']">Olvidé mi contraseña</a>
+            </p>
+            <p class="mb-0">
+                <a [routerLink]="['/auth/register']" class="text-center">Crear una cuenta nueva</a>
+            </p>
+        </div>
+    </div>
+</div>

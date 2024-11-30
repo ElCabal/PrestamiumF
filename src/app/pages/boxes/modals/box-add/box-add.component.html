@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <h4 class="modal-title">Nueva Caja</h4>
+    <button type="button" class="close" (click)="activeModal.dismiss()"> <span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="boxForm">
+      <div class="form-group mb-3">
+        <label for="name">Nombre</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="name" 
+          formControlName="name"
+          [class.is-invalid]="boxForm.get('name')?.invalid && boxForm.get('name')?.touched"
+        >
+        @if (boxForm.get('name')?.errors?.['required'] && boxForm.get('name')?.touched) {
+          <div class="invalid-feedback">
+            El nombre es requerido
+          </div>
+        }
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="description">Descripción</label>
+        <textarea 
+          class="form-control" 
+          id="description" 
+          formControlName="description"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="initialBalance">Saldo Inicial</label>
+        <input 
+          type="number" 
+          class="form-control" 
+          id="initialBalance" 
+          formControlName="initialBalance"
+          [class.is-invalid]="boxForm.get('initialBalance')?.invalid && boxForm.get('initialBalance')?.touched"
+        >
+        @if (boxForm.get('initialBalance')?.errors?.['required'] && boxForm.get('initialBalance')?.touched) {
+          <div class="invalid-feedback">
+            El saldo inicial debe ser mayor o igual a 0
+          </div>
+        }
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">Guardar</button>
+  </div>

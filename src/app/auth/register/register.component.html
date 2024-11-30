@@ -1,0 +1,77 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card card-outline card-primary w-50">
+        <div class="card-header text-center">
+            <a class="h1"><b>Prestamium</b></a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Registrar una nueva cuenta</p>
+
+            <form action="../../index.html" method="post">
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Nombre completo">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Correo electrónico">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder="Contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder="Repite la contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="agreeTerms" name="terms" value="agree">
+                    <label class="form-check-label" for="agreeTerms">
+                        Acepto los <a>términos</a>
+                    </label>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                </div>
+            </form>
+
+            <!-- <div class="social-auth-links text-center mt-3">
+                <a class="btn btn-block btn-primary">
+                    <i class="fab fa-facebook mr-2"></i> Regístrate usando Facebook
+                </a>
+                <a class="btn btn-block btn-danger">
+                    <i class="fab fa-google-plus mr-2"></i> Regístrate usando Google+
+                </a>
+            </div> -->
+
+            <p class="mt-3 mb-0 text-center">
+                <a [routerLink]="['/auth/login']">Ya tengo una cuenta</a>
+            </p>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>

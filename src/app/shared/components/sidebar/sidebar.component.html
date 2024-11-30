@@ -1,0 +1,52 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-1">
+  <!-- Brand Logo -->
+  <a class="brand-link text-center">
+    <span class="brand-text font-weight-light ml-1">Prestamium</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Dashboard Module -->
+        <li class="nav-item">
+          <a [routerLink]="['/dashboard']" 
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}"
+             class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <!-- Prestamos Module -->
+        <li class="nav-item">
+          <a [routerLink]="['/prestamos']" 
+             routerLinkActive="active"
+             class="nav-link">
+            <i class="nav-icon fas fa-dollar-sign"></i>
+            <p>Prestamos</p>
+          </a>
+        </li>
+        <!-- Cajas Module -->
+        <li class="nav-item">
+          <a [routerLink]="['/cajas']" 
+             routerLinkActive="active"
+             class="nav-link">
+            <i class="nav-icon fas fa-cash-register"></i>
+            <p>Cajas</p>
+          </a>
+        </li>
+        <!-- Clientes Module -->
+        <li class="nav-item">
+          <a [routerLink]="['/clientes']" 
+             routerLinkActive="active"
+             class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>Clientes</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</aside>

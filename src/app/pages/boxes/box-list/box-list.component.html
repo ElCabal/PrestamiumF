@@ -1,0 +1,57 @@
+<div class="content">
+    <div class="container-fluid">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Gestión de Cajas</h1>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="card">
+                <div class="card-header">
+                <h3 class="card-title">Listado de Cajas</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-success" (click)="openAddModal()">
+                    <i class="fas fa-plus"></i> Nueva Caja
+                    </button>
+                </div>
+                </div>
+                <div class="card-body">
+                <!-- Aquí va tu tabla de préstamos -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Saldo Inicial</th>
+                                <th>Saldo Actual</th>
+                                <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (box of boxes; track box.id) {
+                                <tr>
+                                    <td>{{ box.name }}</td>
+                                    <td>{{ box.description }}</td>
+                                    <td>{{ box.initialBalance | currency }}</td>
+                                    <td>{{ box.currentBalance | currency }}</td>
+                                    <td class="text-center">
+                                    <button class="btn btn-info" (click)="onViewDetails(box)">
+                                        Ver
+                                    </button>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
