@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+ body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.modal-backdrop {
+  /* Ajusta o elimina el backdrop */
+  z-index: 1040 !important;
+}
+
+.modal {
+  /* Asegúrate que el modal esté por encima del backdrop */
+  z-index: 1050 !important;
+}

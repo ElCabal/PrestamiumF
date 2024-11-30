@@ -1,0 +1,47 @@
+<!-- Botón para abrir el modal -->
+<div class="content">
+    <div class="container-fluid">
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Gestión de Préstamos</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Listado de Préstamos</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-success" (click)="openLoanModal()">
+                <i class="fas fa-plus"></i> Nuevo Préstamo
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Aquí va tu tabla de préstamos -->
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Plazo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Aquí van tus datos -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
