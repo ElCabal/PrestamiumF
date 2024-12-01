@@ -1,11 +1,12 @@
+<!-- box-list.component.html -->
 <div class="content">
     <div class="container-fluid">
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Gestión de Cajas</h1>
-                </div>
+                    <div class="col-sm-6">
+                        <h1>Gestión de Cajas</h1>
+                    </div>
                 </div>
             </div>
         </section>
@@ -13,43 +14,109 @@
         <section class="content">
             <div class="card">
                 <div class="card-header">
-                <h3 class="card-title">Listado de Cajas</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-success" (click)="openAddModal()">
-                    <i class="fas fa-plus"></i> Nueva Caja
-                    </button>
-                </div>
+                    <h3 class="card-title">Listado de Cajas</h3>
+                    <div class="card-tools">
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-default" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button type="button" class="btn btn-default" [class.active]="viewMode === 'table'" (click)="viewMode = 'table'">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-success ml-2" (click)="openAddModal()">
+                            <i class="fas fa-plus"></i> Nueva Caja
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
-                <!-- Aquí va tu tabla de préstamos -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Saldo Inicial</th>
-                                <th>Saldo Actual</th>
-                                <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (box of boxes; track box.id) {
-                                <tr>
-                                    <td>{{ box.name }}</td>
-                                    <td>{{ box.description }}</td>
-                                    <td>{{ box.initialBalance | currency }}</td>
-                                    <td>{{ box.currentBalance | currency }}</td>
-                                    <td class="text-center">
-                                    <button class="btn btn-info" (click)="onViewDetails(box)">
-                                        Ver
-                                    </button>
-                                    </td>
-                                </tr>
+                    @if (loading) {
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    } @else {
+                        @if (viewMode === 'grid') {
+                            <div class="row">
+                                @if (boxes.length === 0) {
+                                    <div class="col-12">
+                                        <div class="text-center py-5">
+                                            <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                                            <h5 class="text-muted">No hay cajas registradas</h5>
+                                            <button class="btn btn-success mt-3" (click)="openAddModal()">
+                                                <i class="fas fa-plus"></i> Crear Primera Caja
+                                            </button>
+                                        </div>
+                                    </div>
+                                } @else {
+                                    @for (box of boxes; track box.id) {
+                                        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                            <div class="small-box" [ngClass]="{
+                                                'bg-success': box.currentBalance > 0,
+                                                'bg-danger': box.currentBalance < 0,
+                                                'bg-info': box.currentBalance === 0
+                                            }">
+                                                <div class="inner">
+                                                    <h5>{{box.name}}</h5>
+                                                    <p class="text-sm mb-2">{{box.description}}</p>
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span>Saldo Inicial:</span>
+                                                        <strong>{{box.initialBalance | currency}}</strong>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Saldo Actual:</span>
+                                                        <strong>{{box.currentBalance | currency}}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-box"></i>
+                                                </div>
+                                                <a class="small-box-footer" style="cursor: pointer;" (click)="onViewDetails(box)">
+                                                    Ver detalles <i class="fas fa-arrow-circle-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
                                 }
-                            </tbody>
-                        </table>
-                    </div>
+                            </div>
+                        } @else {
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                            <th>Saldo Inicial</th>
+                                            <th>Saldo Actual</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (boxes.length === 0) {
+                                            <tr>
+                                                <td colspan="5" class="text-center">No hay cajas registradas</td>
+                                            </tr>
+                                        } @else {
+                                            @for (box of boxes; track box.id) {
+                                                <tr>
+                                                    <td>{{ box.name }}</td>
+                                                    <td>{{ box.description }}</td>
+                                                    <td>{{ box.initialBalance | currency }}</td>
+                                                    <td>{{ box.currentBalance | currency }}</td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-info" (click)="onViewDetails(box)">
+                                                            Ver
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </section>
