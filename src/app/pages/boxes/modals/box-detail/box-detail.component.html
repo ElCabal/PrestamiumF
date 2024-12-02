@@ -8,13 +8,13 @@
     @if (loading) {
       <div class="text-center p-5">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando...</span>
+          <span class="visually-hidden"></span>
         </div>
       </div>
     } @else {
       <div class="row mb-4">
         <div class="col-md-6">
-          <div class="card bg-light">
+          <div class="card">
             <div class="card-body">
               <h5 class="card-title"><strong>{{box.name }}</strong></h5>
               <p class="card-text">{{ box.description }}</p>
@@ -61,67 +61,89 @@
         </div>
       </div>
 
-      <h5>Transacciones</h5>
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Descripción</th>
-              <th class="text-end">Monto</th>
-              <th class="text-end">Saldo Anterior</th>
-              <th class="text-end">Nuevo Saldo</th>
-            </tr>
-          </thead>
-          <tbody>
-            @if (box.transactions.length === 0) {
-              <tr>
-                <td colspan="5" class="text-center">No hay transacciones registradas</td>
-              </tr>
-            } @else {
-              @for (transaction of box.transactions; track transaction.id) {
+      <div class="card bg-light mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0"><strong>Transacciones</strong></h5>
+          <span class="badge bg-primary">{{box.transactions.length}} transacciones</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
                 <tr>
-                  <td>{{ transaction.transactionDate | date:'short' }}</td>
-                  <td>{{ transaction.description }}</td>
-                  <td class="text-end" [ngClass]="{
-                    'text-success': transaction.type === 'income',
-                    'text-danger': transaction.type === 'expense'
-                  }">
-                    {{ transaction.type === 'income' ? '+' : '-' }}
-                    {{ transaction.amount | currency }}
-                  </td>
-                  <td class="text-end">{{ transaction.previousBalance | currency }}</td>
-                  <td class="text-end">{{ transaction.newBalance | currency }}</td>
+                  <th>Fecha</th>
+                  <th>Tipo</th>  <!-- Nueva columna -->
+                  <th>Descripción</th>
+                  <th class="text-end">Monto</th>
+                  <th class="text-end">Saldo Anterior</th>
+                  <th class="text-end">Nuevo Saldo</th>
                 </tr>
-              }
-            }
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                @if (box.transactions.length === 0) {
+                  <tr>
+                    <td colspan="6" class="text-center">No hay transacciones registradas</td>
+                  </tr>
+                } @else {
+                  @for (transaction of box.transactions; track transaction.id) {
+                    <tr>
+                      <td>{{ transaction.transactionDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                      <td>
+                        <span class="badge" [ngClass]="{
+                          'bg-success': transaction.type === 'income',
+                          'bg-danger': transaction.type === 'expense'
+                        }">
+                          {{ transaction.type === 'income' ? 'Ingreso' : 'Egreso' }}
+                        </span>
+                      </td>
+                      <td>{{ transaction.description }}</td>
+                      <td class="text-end fw-bold" [ngClass]="{
+                        'text-success': transaction.type === 'income',
+                        'text-danger': transaction.type === 'expense'
+                      }">
+                        {{ transaction.type === 'income' ? '+' : '-' }}
+                        {{ transaction.amount | currency }}
+                      </td>
+                      <td class="text-end text-muted">{{ transaction.previousBalance | currency }}</td>
+                      <td class="text-end">{{ transaction.newBalance | currency }}</td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       @if (box && box.loans.length > 0) {
-        <h5 class="mt-4">Préstamos Asociados</h5>
-        <div class="table-responsive">
-          <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th class="text-end">Monto</th>
-                <th>Fecha Inicio</th>
-                <th class="text-end">Saldo Pendiente</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (loan of box.loans; track loan.id) {
-                <tr>
-                  <td>{{loan.clientName}}</td>
-                  <td class="text-end">{{loan.amount | currency}}</td>
-                  <td>{{loan.startDate | date}}</td>
-                  <td class="text-end">{{loan.remainingBalance | currency}}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+        <div class="card bg-light">
+          <div class="card-header">
+            <h5 class="card-title mb-0"><strong>Préstamos Asociados</strong></h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th class="text-end">Monto</th>
+                    <th>Fecha Inicio</th>
+                    <th class="text-end">Saldo Pendiente</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (loan of box.loans; track loan.id) {
+                    <tr>
+                      <td>{{loan.clientName}}</td>
+                      <td class="text-end">{{loan.amount | currency}}</td>
+                      <td>{{loan.startDate | date}}</td>
+                      <td class="text-end">{{loan.remainingBalance | currency}}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       }
     }
