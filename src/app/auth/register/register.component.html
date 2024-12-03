@@ -107,22 +107,6 @@
             }
           </div>
 
-          <div class="form-check mb-3">
-            <input type="checkbox" 
-                   class="form-check-input" 
-                   id="agreeTerms"
-                   formControlName="agreeTerms"
-                   [ngClass]="{'is-invalid': submitted && f['agreeTerms'].errors}">
-            <label class="form-check-label" for="agreeTerms">
-              Acepto los <a href="#">términos y condiciones</a>
-            </label>
-            @if (submitted && f['agreeTerms'].errors) {
-              <div class="invalid-feedback">
-                Debe aceptar los términos para continuar
-              </div>
-            }
-          </div>
-
           <button type="submit" 
                   class="btn btn-primary w-100" 
                   [disabled]="loading">

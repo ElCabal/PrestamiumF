@@ -32,12 +32,14 @@
 
       <div class="form-group mb-3">
         <label for="initialBalance">Saldo Inicial <span class="text-danger">*</span></label>
-        <input 
-          type="number" 
+        <input
+          type="text"
           class="form-control" 
           id="initialBalance" 
           formControlName="initialBalance"
           [ngClass]="{'is-invalid': submitted && f['initialBalance'].errors}"
+          currencyMask
+          [options]="currencyConfig"
         >
         @if (submitted && f['initialBalance'].errors) {
           <div class="invalid-feedback">
