@@ -37,8 +37,8 @@ export const routes: Routes = [
           },
           {
             path: 'clientes',
-            loadComponent: () => import('./pages/customers/customer-list/customer-list.component')
-              .then(m => m.CustomerListComponent)
+            loadComponent: () => import('./pages/clients/client-list/client-list.component')
+              .then(m => m.ClientListComponent)
           }
         ]
       }

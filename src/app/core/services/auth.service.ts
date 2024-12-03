@@ -43,7 +43,6 @@ export class AuthService {
   }
 
   logout(): void {
-    this.alertService.success('Sesión cerrada exitosamente');
     localStorage.removeItem('user');
     this.userSubject.next(null);
     this.router.navigate(['/auth/login']);

@@ -1,0 +1,112 @@
+<div class="modal-header">
+    <h4 class="modal-title">Nuevo Cliente</h4>
+    <button type="button" class="close" (click)="onClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="clientForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label class="form-label">Nombres <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="firstName"
+              [ngClass]="{'is-invalid': submitted && f['firstName'].errors}">
+            <div class="invalid-feedback" *ngIf="submitted && f['firstName'].errors">
+              El nombre es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label class="form-label">Apellidos <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="lastName"
+              [ngClass]="{'is-invalid': submitted && f['lastName'].errors}">
+            <div class="invalid-feedback" *ngIf="submitted && f['lastName'].errors">
+              El apellido es requerido
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label class="form-label">Documento <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="documentNumber"
+              [ngClass]="{'is-invalid': submitted && f['documentNumber'].errors}">
+            <div class="invalid-feedback" *ngIf="submitted && f['documentNumber'].errors">
+              El documento es requerido
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label class="form-label">Teléfono <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="phone"
+              [ngClass]="{'is-invalid': submitted && f['phone'].errors}">
+            <div class="invalid-feedback" *ngIf="submitted && f['phone'].errors">
+              El teléfono es requerido
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label class="form-label">Email</label>
+            <input 
+              type="email" 
+              class="form-control" 
+              formControlName="email"
+              [ngClass]="{'is-invalid': submitted && f['email'].errors}">
+            <div class="invalid-feedback" *ngIf="submitted && f['email'].errors?.['email']">
+              Ingrese un email válido
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label class="form-label">Dirección</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              formControlName="address">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button 
+      type="button" 
+      class="btn btn-primary" 
+      (click)="onSubmit()" 
+      [disabled]="loading">
+      <span class="spinner-border spinner-border-sm me-1" *ngIf="loading"></span>
+      Guardar
+    </button>
+    <button 
+      type="button" 
+      class="btn btn-secondary" 
+      (click)="onClose()"
+      [disabled]="loading">
+      Cancelar
+    </button>
+  </div>

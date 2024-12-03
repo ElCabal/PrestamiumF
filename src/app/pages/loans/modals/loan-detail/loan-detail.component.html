@@ -1,1 +1,135 @@
-<p>loan-detail works!</p>
+<div class="modal-header">
+    <h4 class="modal-title">Detalle de Préstamo</h4>
+    <button type="button" class="close" (click)="activeModal.dismiss()">
+        <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    @if (loading) {
+      <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    } @else {
+      <!-- Información General -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><strong>Información del Préstamo</strong></h5>
+              <div class="mt-5">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Cliente:</span>
+                  <strong>{{ loan.clientName }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Monto:</span>
+                  <strong>{{ loan.amount | currency }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Tasa de Interés:</span>
+                  <strong>{{ loan.interestRate }}%</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Cuotas:</span>
+                  <strong>{{ loan.fees }}</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Frecuencia:</span>
+                  <strong>{{ loan.frequency === 'monthly' ? 'Mensual' : 'Quincenal' }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><strong>Resumen de Pagos</strong></h5>
+              <div class="mt-5">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Interés Total:</span>
+                  <strong>{{ loan.totalInterestReceivable | currency }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Monto Total:</span>
+                  <strong>{{ loan.totalAmountDue | currency }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Cuota:</span>
+                  <strong>{{ loan.paymentAmount | currency }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Fecha Inicio:</span>
+                  <strong>{{ loan.startDate | date }}</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Saldo Pendiente:</span>
+                  <strong [class.text-danger]="loan.remainingBalance > 0">
+                    {{ loan.remainingBalance | currency }}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuotas -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><strong>Plan de Pagos</strong></h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Fecha Vencimiento</th>
+                  <th class="text-end">Monto</th>
+                  <th>Estado</th>
+                  <th>Fecha Pago</th>
+                  <th class="text-end">Monto Pagado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (installment of loan.installments; track installment.id; let i = $index) {
+                  <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ installment.dueDate | date }}</td>
+                    <td class="text-end">{{ installment.amount | currency }}</td>
+                    <td>
+                      <span class="badge"
+                            [class.bg-success]="installment.isPaid"
+                            [class.bg-warning]="!installment.isPaid">
+                        {{ installment.isPaid ? 'Pagado' : 'Pendiente' }}
+                      </span>
+                    </td>
+                    <td>{{ installment.paymentDate | date }}</td>
+                    <td class="text-end">{{ installment.paidAmount | currency }}</td>
+                    <td>
+                      @if (!installment.isPaid) {
+                        <button class="btn btn-success btn-sm" 
+                                (click)="onRegisterPayment(installment)">
+                          <i class="fas fa-dollar-sign"></i>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
+      Cerrar
+    </button>
+  </div>
