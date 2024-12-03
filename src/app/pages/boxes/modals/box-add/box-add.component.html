@@ -5,15 +5,15 @@
   <div class="modal-body">
     <form [formGroup]="boxForm">
       <div class="form-group mb-3">
-        <label for="name">Nombre</label>
+        <label for="name">Nombre <span class="text-danger">*</span></label>
         <input 
           type="text" 
           class="form-control" 
           id="name" 
           formControlName="name"
-          [class.is-invalid]="boxForm.get('name')?.invalid && boxForm.get('name')?.touched"
+          [ngClass]="{'is-invalid': submitted && f['name'].errors}"
         >
-        @if (boxForm.get('name')?.errors?.['required'] && boxForm.get('name')?.touched) {
+        @if (submitted && f['name'].errors) {
           <div class="invalid-feedback">
             El nombre es requerido
           </div>
@@ -31,15 +31,17 @@
       </div>
 
       <div class="form-group mb-3">
-        <label for="initialBalance">Saldo Inicial</label>
-        <input 
-          type="number" 
+        <label for="initialBalance">Saldo Inicial <span class="text-danger">*</span></label>
+        <input
+          type="text"
           class="form-control" 
           id="initialBalance" 
           formControlName="initialBalance"
-          [class.is-invalid]="boxForm.get('initialBalance')?.invalid && boxForm.get('initialBalance')?.touched"
+          [ngClass]="{'is-invalid': submitted && f['initialBalance'].errors}"
+          currencyMask
+          [options]="currencyConfig"
         >
-        @if (boxForm.get('initialBalance')?.errors?.['required'] && boxForm.get('initialBalance')?.touched) {
+        @if (submitted && f['initialBalance'].errors) {
           <div class="invalid-feedback">
             El saldo inicial debe ser mayor o igual a 0
           </div>
@@ -48,6 +50,6 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cancelar</button>
     <button type="button" class="btn btn-primary" (click)="onSubmit()">Guardar</button>
+    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancelar</button>
   </div>

@@ -1,37 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddLoanComponent } from '../modals/loan-add/loan-add.component';
+import { LoanAddComponent } from '../modals/loan-add/loan-add.component';
+import { AlertService } from '../../../core/services/alert.service';
+import { Loan } from '../interfaces/loan.interface';
+import { LoanService } from '../services/loan.service';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { LoanDetailComponent } from '../modals/loan-detail/loan-detail.component';
 
 @Component({
   selector: 'app-loan-list',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, DatePipe, CurrencyPipe],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.scss'
 })
 export class LoanListComponent {
-  constructor(private modalService: NgbModal) {}
+  private loanService = inject(LoanService);
+  private modalService = inject(NgbModal);
+  private alertService = inject(AlertService);
 
-  openLoanModal() {
-    const modalRef = this.modalService.open(AddLoanComponent, {
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      // Importante: estas clases ayudan a que el modal se muestre correctamente
-      modalDialogClass: 'modal-dialog-centered',
-      windowClass: 'modal-custom'
+  loans: Loan[] = [];
+  loading = false;
+
+  ngOnInit() {
+    this.loadLoans();
+  }
+
+  loadLoans() {
+    this.loading = true;
+    this.loanService.getAllLoans().subscribe({
+      next: response => {
+        if (response.success) {
+          this.loans = response.data ?? [];
+        } else {
+          this.alertService.error(response.errorMessage || 'Error al cargar los préstamos');
+        }
+      },
+      error: error => {
+        console.error('Error:', error);
+        this.alertService.error('Error al cargar los préstamos');
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  openAddModal() {
+    const modalRef = this.modalService.open(LoanAddComponent, {
+      size: 'xl',
+      backdrop: 'static'
     });
 
     modalRef.result.then(
       (result) => {
         if (result) {
-          console.log('Modal cerrado con:', result);
-          // Aquí manejas los datos del préstamo
+          this.loadLoans();
+          this.alertService.success('Préstamo creado exitosamente');
         }
       },
-      (reason) => {
-        console.log('Modal descartado');
-      }
+      () => {}
     );
+  }
+
+  onViewDetails(loan: Loan) {
+    const modalRef = this.modalService.open(LoanDetailComponent, {
+      size: 'xl',
+      backdrop: 'static'
+    });
+    
+    modalRef.componentInstance.loan = loan;  // Pasamos el préstamo al componente modal
+  }
+  onRegisterPayment(loan: Loan) {
+    // Implementaremos esto después
+    console.log('Registrar pago:', loan);
   }
 }

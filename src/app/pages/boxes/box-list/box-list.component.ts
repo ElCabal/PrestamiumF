@@ -59,9 +59,8 @@ export class BoxListComponent implements OnInit {
 
   onViewDetails(box: Box) {
     const modalRef = this.modalService.open(BoxDetailsComponent, {
-      backdrop: 'static',
-      keyboard: false,
       size: 'xl',
+      backdrop: 'static',
       modalDialogClass: 'modal-dialog-centered',
       windowClass: 'modal-custom'
     });

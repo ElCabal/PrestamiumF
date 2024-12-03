@@ -1,66 +1,152 @@
 <div class="modal-header">
 	<h4 class="modal-title">Nuevo Préstamo</h4>
-	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()"><span aria-hidden="true">&times;</span></button>
-</div>
-<div class="modal-body">
-	<form [formGroup]="loanForm">
-	  <div class="form-group mb-3">
-		<label for="clientName" class="form-label">Nombre del Cliente</label>
-		<input
-		  type="text"
-		  class="form-control"
-		  id="clientName"
-		  formControlName="clientName"
-		  [class.is-invalid]="loanForm.get('clientName')?.invalid && loanForm.get('clientName')?.touched"
-		>
-		@if (loanForm.get('clientName')?.errors?.['required'] && loanForm.get('clientName')?.touched) {
-		  <div class="invalid-feedback">
-			El nombre del cliente es requerido
-		  </div>
-		}
+	<button type="button" class="close" (click)="onClose()">
+		<span>&times;</span>
+	</button>
+  </div>
+  <div class="modal-body">
+	@if (loading) {
+	  <div class="text-center p-5">
+		<div class="spinner-border text-primary" role="status">
+		  <span class="visually-hidden">Cargando...</span>
+		</div>
 	  </div>
+	} @else {
+	  <form [formGroup]="loanForm">
+		<!-- Cliente y Caja -->
+		<div class="row mb-3">
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Cliente <span class="text-danger">*</span></label>
+			  <ng-select
+				[items]="clients"
+				bindLabel="fullName"
+				bindValue="id"
+				placeholder="Buscar cliente..."
+				formControlName="clientId"
+				[clearable]="false"
+				[loading]="loading"
+				[ngClass]="{'is-invalid': submitted && f['clientId'].errors}">
+				<ng-template ng-option-tmp let-item="item">
+				  {{item.firstName}} {{item.lastName}} - {{item.documentNumber}}
+				</ng-template>
+			  </ng-select>
+			  @if (submitted && f['clientId'].errors) {
+				<div class="invalid-feedback">
+				  Seleccione un cliente
+				</div>
+			  }
+			</div>
+		  </div>
 
-	  <div class="form-group mb-3">
-		<label for="amount" class="form-label">Monto del Préstamo</label>
-		<input
-		  type="number"
-		  class="form-control"
-		  id="amount"
-		  formControlName="amount"
-		  [class.is-invalid]="loanForm.get('amount')?.invalid && loanForm.get('amount')?.touched"
-		>
-		@if (loanForm.get('amount')?.errors?.['required'] && loanForm.get('amount')?.touched) {
-		  <div class="invalid-feedback">
-			El monto es requerido
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Caja <span class="text-danger">*</span></label>
+			  <ng-select
+				[items]="boxes"
+				bindLabel="name"
+				bindValue="id"
+				placeholder="Buscar caja..."
+				formControlName="boxId"
+				[clearable]="false"
+				[loading]="loading"
+				[ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
+				<ng-template ng-option-tmp let-item="item">
+				  {{item.name}} - Saldo: {{item.currentBalance | currency}}
+				</ng-template>
+			  </ng-select>
+			  @if (submitted && f['boxId'].errors) {
+				<div class="invalid-feedback">
+				  Seleccione una caja
+				</div>
+			  }
+			</div>
 		  </div>
-		}
-	  </div>
+		</div>
 
-	  <div class="form-group mb-3">
-		<label for="term" class="form-label">Plazo (meses)</label>
-		<select
-		  class="form-control"
-		  id="term"
-		  formControlName="term"
-		  [class.is-invalid]="loanForm.get('term')?.invalid && loanForm.get('term')?.touched"
-		>
-		  <option value="">Seleccione un plazo</option>
-		  <option value="6">6 meses</option>
-		  <option value="12">12 meses</option>
-		  <option value="24">24 meses</option>
-		  <option value="36">36 meses</option>
-		</select>
-		@if (loanForm.get('term')?.errors?.['required'] && loanForm.get('term')?.touched) {
-		  <div class="invalid-feedback">
-			El plazo es requerido
+		<!-- Monto y Tasa -->
+		<div class="row mb-3">
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Monto <span class="text-danger">*</span></label>
+			  <div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">$</span>
+				</div>
+				<input type="number" class="form-control" formControlName="amount"
+					   [ngClass]="{'is-invalid': submitted && f['amount'].errors}">
+			  </div>
+			  <div class="invalid-feedback" *ngIf="submitted && f['amount'].errors">
+				El monto debe ser mayor a 0
+			  </div>
+			</div>
 		  </div>
-		}
-	  </div>
-	</form>
-</div>
-<div class="modal-footer">
-<button type="button" class="btn btn-default" (click)="activeModal.dismiss()">Cancelar</button>
-<button type="button" class="btn btn-primary" (click)="saveLoan()" [disabled]="loanForm.invalid">
-	Guardar
-</button>
-</div>
+
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Tasa de Interés (%) <span class="text-danger">*</span></label>
+			  <input type="number" class="form-control" formControlName="interestRate"
+					 [ngClass]="{'is-invalid': submitted && f['interestRate'].errors}">
+			  <div class="invalid-feedback" *ngIf="submitted && f['interestRate'].errors">
+				La tasa debe ser mayor a 0
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+		<!-- Cuotas y Frecuencia -->
+		<div class="row mb-3">
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Número de Cuotas <span class="text-danger">*</span></label>
+			  <input type="number" class="form-control" formControlName="fees"
+					 [ngClass]="{'is-invalid': submitted && f['fees'].errors}">
+			  <div class="invalid-feedback" *ngIf="submitted && f['fees'].errors">
+				El número de cuotas debe ser mayor a 0
+			  </div>
+			</div>
+		  </div>
+
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Frecuencia <span class="text-danger">*</span></label>
+			  <select class="custom-select" formControlName="frequency"
+					  [ngClass]="{'is-invalid': submitted && f['frequency'].errors}">
+				<option value="">Seleccione la frecuencia</option>
+				<option value="monthly">Mensual</option>
+				<option value="biweekly">Quincenal</option>
+			  </select>
+			  <div class="invalid-feedback">
+				Seleccione la frecuencia
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+		<!-- Fecha de Inicio -->
+		<div class="row">
+		  <div class="col-md-6">
+			<div class="form-group">
+			  <label class="form-label">Fecha de Inicio <span class="text-danger">*</span></label>
+			  <input type="date" class="form-control" formControlName="startDate"
+					 [ngClass]="{'is-invalid': submitted && f['startDate'].errors}">
+			  <div class="invalid-feedback">
+				La fecha es requerida
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </form>
+	}
+  </div>
+  <div class="modal-footer">
+	<button type="button" class="btn btn-primary" 
+			(click)="onSubmit()" [disabled]="loading">
+	  <span class="spinner-border spinner-border-sm me-1" *ngIf="loading"></span>
+	  Guardar
+	</button>
+	<button type="button" class="btn btn-secondary" 
+			(click)="onClose()" [disabled]="loading">
+	  Cancelar
+	</button>
+  </div>

@@ -35,7 +35,15 @@ export class BoxDetailsComponent implements OnInit {
     this.boxService.getBoxDetail(this.box.id).subscribe({
       next: (response) => {
         if (response.success) {
-          this.box = response.data!;
+          // Ordenar transacciones por fecha (más recientes primero)
+          const sortedTransactions = [...response.data!.transactions].sort((a, b) => 
+            new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime()
+          );
+          
+          this.box = {
+            ...response.data!,
+            transactions: sortedTransactions
+          };
           this.calculateTotals();
         } else {
           this.alertService.error(response.errorMessage || 'Error al cargar los detalles de la caja');
@@ -49,7 +57,7 @@ export class BoxDetailsComponent implements OnInit {
         this.loading = false;
       }
     });
-  }
+}
 
   private calculateTotals() {
     this.totalIncome = this.box.transactions

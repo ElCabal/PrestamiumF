@@ -1,0 +1,73 @@
+<!-- src/app/features/client/pages/client-list/client-list.component.html -->
+<div class="content">
+    <div class="container-fluid">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Gestión de Clientes</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Listado de Clientes</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-success" (click)="openAddModal()">
+                            <i class="fas fa-plus"></i> Nuevo Cliente
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (loading) {
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Documento</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>Teléfono</th>
+                                        <th>Email</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (clients.length === 0) {
+                                        <tr>
+                                            <td colspan="6" class="text-center">No hay clientes registrados</td>
+                                        </tr>
+                                    } @else {
+                                        @for (client of clients; track client.id) {
+                                            <tr>
+                                                <td>{{ client.documentNumber }}</td>
+                                                <td>{{ client.firstName }}</td>
+                                                <td>{{ client.lastName }}</td>
+                                                <td>{{ client.phone }}</td>
+                                                <td>{{ client.email }}</td>
+                                                <td>
+                                                    <button class="btn btn-info btn-sm" (click)="onViewDetails(client)">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

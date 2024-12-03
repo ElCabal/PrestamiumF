@@ -24,7 +24,7 @@
                                 <i class="fas fa-list"></i>
                             </button>
                         </div>
-                        <button type="button" class="btn btn-success ml-2" (click)="openAddModal()">
+                        <button [hidden]="boxes.length === 0" type="button" class="btn btn-success ml-2" (click)="openAddModal()">
                             <i class="fas fa-plus"></i> Nueva Caja
                         </button>
                     </div>

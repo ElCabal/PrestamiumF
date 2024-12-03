@@ -16,6 +16,8 @@ export interface LoginRequest {
     firstName: string;
     lastName: string;
     token: string;
+    refreshToken: string;
+    refreshTokenExpiration: Date;
   }
 
   export interface UserInfo {

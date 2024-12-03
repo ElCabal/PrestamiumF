@@ -1,15 +1,83 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "@ng-select/ng-select/themes/default.theme.css";
 
- body {
+body {
   font-family: 'Poppins', sans-serif;
 }
 
 .modal-backdrop {
   /* Ajusta o elimina el backdrop */
   z-index: 1040 !important;
+  &:nth-child(2n) {
+    z-index: 1060;
+  }
+  &:nth-child(3n) {
+    z-index: 1070;
+  }
 }
 
 .modal {
   /* Asegúrate que el modal esté por encima del backdrop */
   z-index: 1050 !important;
+  &:nth-child(2n) {
+    z-index: 1065;
+  }
+  &:nth-child(3n) {
+    z-index: 1075;
+  }
+}
+
+/* Estilos para modales anidados */
+.modal-second {
+  z-index: 1080 !important;
+  
+  .modal-backdrop {
+    z-index: 1070 !important;
+  }
+  
+  .modal-dialog {
+    z-index: 1080 !important;
+  }
+}
+
+/* Ajustes para AdminLTE */
+.modal-payment-container {
+  position: relative;
+  z-index: 1070;
+}
+
+/* Asegura que el backdrop del segundo modal sea visible */
+ngb-modal-backdrop.modal-backdrop {
+  &:nth-of-type(2) {
+    z-index: 1070 !important;
+  }
+}
+
+.modal-backdrop + .modal-backdrop {
+  z-index: 1070 !important;
+}
+
+/* Ajuste para el contenedor del modal */
+.modal-custom {
+  .modal-content {
+    position: relative;
+    z-index: 1060;
+  }
+}
+
+/* Personalización para AdminLTE */
+.ng-select {
+  .ng-select-container {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+  }
+
+  &.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+
+  &.is-invalid .ng-select-container {
+    border-color: #dc3545;
+  }
 }

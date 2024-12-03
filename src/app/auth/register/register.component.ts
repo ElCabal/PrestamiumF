@@ -24,13 +24,14 @@ export class RegisterComponent {
     lastName: ['', [Validators.required, Validators.maxLength(50)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', [Validators.required]],
-    agreeTerms: [false, [Validators.requiredTrue]]
+    confirmPassword: ['', [Validators.required]]
   }, {
     validators: this.passwordMatchValidator
   });
 
   loading = false;
+  submitted = false;
+  showPassword = false;
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
@@ -45,7 +46,16 @@ export class RegisterComponent {
     return null;
   }
 
+  get f() { 
+    return this.registerForm.controls; 
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
+    this.submitted = true;
     if (this.registerForm.invalid) {
       return;
     }
