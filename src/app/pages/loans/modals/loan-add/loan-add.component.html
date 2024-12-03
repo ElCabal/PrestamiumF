@@ -18,36 +18,48 @@
 		  <div class="col-md-6">
 			<div class="form-group">
 			  <label class="form-label">Cliente <span class="text-danger">*</span></label>
-			  <select class="custom-select" formControlName="clientId"
-					  [ngClass]="{'is-invalid': submitted && f['clientId'].errors}">
-				<option value="">Seleccione un cliente</option>
-				@for (client of clients; track client.id) {
-				  <option [value]="client.id">
-					{{client.firstName}} {{client.lastName}} - {{client.documentNumber}}
-				  </option>
-				}
-			  </select>
-			  <div class="invalid-feedback">
-				Seleccione un cliente
-			  </div>
+			  <ng-select
+				[items]="clients"
+				bindLabel="fullName"
+				bindValue="id"
+				placeholder="Buscar cliente..."
+				formControlName="clientId"
+				[clearable]="false"
+				[loading]="loading"
+				[ngClass]="{'is-invalid': submitted && f['clientId'].errors}">
+				<ng-template ng-option-tmp let-item="item">
+				  {{item.firstName}} {{item.lastName}} - {{item.documentNumber}}
+				</ng-template>
+			  </ng-select>
+			  @if (submitted && f['clientId'].errors) {
+				<div class="invalid-feedback">
+				  Seleccione un cliente
+				</div>
+			  }
 			</div>
 		  </div>
 
 		  <div class="col-md-6">
 			<div class="form-group">
 			  <label class="form-label">Caja <span class="text-danger">*</span></label>
-			  <select class="custom-select" formControlName="boxId"
-					  [ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
-				<option value="">Seleccione una caja</option>
-				@for (box of boxes; track box.id) {
-				  <option [value]="box.id">
-					{{box.name}} - Saldo: {{box.currentBalance | currency}}
-				  </option>
-				}
-			  </select>
-			  <div class="invalid-feedback">
-				Seleccione una caja
-			  </div>
+			  <ng-select
+				[items]="boxes"
+				bindLabel="name"
+				bindValue="id"
+				placeholder="Buscar caja..."
+				formControlName="boxId"
+				[clearable]="false"
+				[loading]="loading"
+				[ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
+				<ng-template ng-option-tmp let-item="item">
+				  {{item.name}} - Saldo: {{item.currentBalance | currency}}
+				</ng-template>
+			  </ng-select>
+			  @if (submitted && f['boxId'].errors) {
+				<div class="invalid-feedback">
+				  Seleccione una caja
+				</div>
+			  }
 			</div>
 		  </div>
 		</div>

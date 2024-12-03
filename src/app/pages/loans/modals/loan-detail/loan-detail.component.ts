@@ -52,7 +52,10 @@ export class LoanDetailComponent {
   onRegisterPayment(installment: any) {
     const modalRef = this.modalService.open(PaymentAddComponent, {
       size: 'lg',
-      backdrop: 'static'
+      backdrop: 'static',
+      windowClass: 'modal-second',
+      modalDialogClass: 'modal-dialog-centered',
+      container: '.modal-payment-container'
     });
     
     modalRef.componentInstance.installment = {
@@ -64,7 +67,7 @@ export class LoanDetailComponent {
     modalRef.result.then(
       (result) => {
         if (result) {
-          this.loadLoanDetail(); // Recargar el detalle del préstamo
+          this.loadLoanDetail();
           this.alertService.success('Pago registrado exitosamente');
         }
       },

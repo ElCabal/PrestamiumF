@@ -1,6 +1,8 @@
 <div class="modal-header">
     <h4 class="modal-title">Registrar Pago</h4>
-    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+    <button type="button" class="close" (click)="activeModal.dismiss()">
+      <span>&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <div class="card mb-3">
@@ -29,20 +31,26 @@
     <form [formGroup]="paymentForm">
       <div class="row">
         <div class="col-md-6">
-          <div class="form-group mb-3">
+          <div class="form-group">
             <label class="form-label">Caja <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="boxId"
-                    [ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
-              <option value="">Seleccione una caja</option>
-              @for (box of boxes; track box.id) {
-                <option [value]="box.id">
-                  {{box.name}} - Saldo: {{box.currentBalance | currency}}
-                </option>
-              }
-            </select>
-            <div class="invalid-feedback">
-              Seleccione una caja
-            </div>
+            <ng-select
+              [items]="boxes"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Buscar caja..."
+              formControlName="boxId"
+              [clearable]="false"
+              [loading]="loading"
+              [ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
+              <ng-template ng-option-tmp let-item="item">
+                {{item.name}} - Saldo: {{item.currentBalance | currency}}
+              </ng-template>
+            </ng-select>
+            @if (submitted && f['boxId'].errors) {
+              <div class="invalid-feedback">
+                Seleccione una caja
+              </div>
+            }
           </div>
         </div>
 

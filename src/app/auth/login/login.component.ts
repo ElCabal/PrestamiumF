@@ -25,8 +25,15 @@ export class LoginComponent {
   });
 
   loading = false;
+  submitted = false;
+  showPassword = false;
+
+  get f() { 
+    return this.loginForm.controls; 
+  }
 
   onSubmit() {
+    this.submitted = true;
     if (this.loginForm.invalid) {
       return;
     }
@@ -70,5 +77,9 @@ export class LoginComponent {
         remember: true
       });
     }
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }

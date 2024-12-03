@@ -31,6 +31,8 @@ export class RegisterComponent {
   });
 
   loading = false;
+  submitted = false;
+  showPassword = false;
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
@@ -45,7 +47,16 @@ export class RegisterComponent {
     return null;
   }
 
+  get f() { 
+    return this.registerForm.controls; 
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
+    this.submitted = true;
     if (this.registerForm.invalid) {
       return;
     }

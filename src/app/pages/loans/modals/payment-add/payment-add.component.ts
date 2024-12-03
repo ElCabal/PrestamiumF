@@ -5,11 +5,16 @@ import { AlertService } from '../../../../core/services/alert.service';
 import { BoxService } from '../../../boxes/services/box.service';
 import { LoanService } from '../../services/loan.service';
 import { CommonModule } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-payment-add',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    NgSelectModule
+  ],
   templateUrl: './payment-add.component.html',
   styleUrl: './payment-add.component.scss'
 })
