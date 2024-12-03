@@ -6,11 +6,19 @@ import { AlertService } from '../../../../core/services/alert.service';
 import { BoxService } from '../../../boxes/services/box.service';
 import { ClientService } from '../../../clients/services/client.service';
 import { LoanService } from '../../services/loan.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-loan',
   standalone: true,
-  imports: [NgbDatepickerModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    NgbDatepickerModule, 
+    ReactiveFormsModule, 
+    CommonModule,
+    NgSelectModule,
+    CurrencyPipe
+  ],
   templateUrl: './loan-add.component.html',
   styleUrl: './loan-add.component.scss'
 })
