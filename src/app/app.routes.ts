@@ -27,18 +27,18 @@ export const routes: Routes = [
           },
           {
             path: 'prestamos',
-            loadComponent: () => import('./pages/loans/loan-list/loan-list.component')
-              .then(m => m.LoanListComponent)
+            loadChildren: () => import('./pages/loans/loans.routes')
+              .then(m => m.LOAN_ROUTES)
           },
           {
             path: 'cajas',
-            loadComponent: () => import('./pages/boxes/box-list/box-list.component')
-              .then(m => m.BoxListComponent)
+            loadChildren: () => import('./pages/boxes/boxes.routes')
+              .then(m => m.BOX_ROUTES)
           },
           {
             path: 'clientes',
-            loadComponent: () => import('./pages/clients/client-list/client-list.component')
-              .then(m => m.ClientListComponent)
+            loadChildren: () => import('./pages/clients/clients.routes')
+              .then(m => m.CLIENT_ROUTES)
           }
         ]
       }

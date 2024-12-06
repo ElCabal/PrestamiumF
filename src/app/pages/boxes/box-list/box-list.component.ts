@@ -4,7 +4,7 @@ import { BoxService } from '../services/box.service';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BoxAddComponent } from '../modals/box-add/box-add.component';
-import { BoxDetailsComponent } from '../modals/box-detail/box-detail.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-box-list',
@@ -16,6 +16,7 @@ import { BoxDetailsComponent } from '../modals/box-detail/box-detail.component';
 export class BoxListComponent implements OnInit {
   private boxService = inject(BoxService);
   private modalService = inject(NgbModal);
+  private router = inject(Router);
   boxes: Box[] = [];
   viewMode: 'grid' | 'table' = 'grid';
   loading = false;
@@ -58,13 +59,6 @@ export class BoxListComponent implements OnInit {
   }
 
   onViewDetails(box: Box) {
-    const modalRef = this.modalService.open(BoxDetailsComponent, {
-      size: 'xl',
-      backdrop: 'static',
-      modalDialogClass: 'modal-dialog-centered',
-      windowClass: 'modal-custom'
-    });
-  
-    modalRef.componentInstance.box = box;
+    this.router.navigate(['/cajas', box.id]);
   }
 }

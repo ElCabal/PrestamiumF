@@ -1,14 +1,15 @@
-<div class="modal-header">
-    <h4 class="modal-title">Detalles de Caja</h4>
-    <button type="button" class="close" (click)="activeModal.dismiss()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="mb-0">Detalles de Caja</h3>
+      <button class="btn btn-secondary" [routerLink]="['/cajas']">
+        Volver a Cajas
+      </button>
+    </div>
+  
     @if (loading) {
       <div class="text-center p-5">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden"></span>
+          <span class="visually-hidden">Cargando...</span>
         </div>
       </div>
     } @else {
@@ -16,18 +17,18 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title"><strong>{{box.name }}</strong></h5>
-              <p class="card-text">{{ box.description }}</p>
+              <h5 class="card-title"><strong>{{box.name}}</strong></h5>
+              <p class="card-text">{{box.description}}</p>
               <div class="mt-3">
                 <div class="d-flex justify-content-between mb-2">
                   <span>Saldo Inicial:</span>
-                  <strong>{{ box.initialBalance | currency }}</strong>
+                  <strong>{{box.initialBalance | currency}}</strong>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span>Saldo Actual:</span>
                   <strong [class.text-success]="box.currentBalance >= 0" 
                           [class.text-danger]="box.currentBalance < 0">
-                    {{ box.currentBalance | currency }}
+                    {{box.currentBalance | currency}}
                   </strong>
                 </div>
               </div>
@@ -42,25 +43,25 @@
                 <div class="d-flex justify-content-between mb-2">
                   <span>Total Ingresos:</span>
                   <strong class="text-success">
-                    {{ totalIncome | currency }}
+                    {{totalIncome | currency}}
                   </strong>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                   <span>Total Egresos:</span>
                   <strong class="text-danger">
-                    {{ totalExpense | currency }}
+                    {{totalExpense | currency}}
                   </strong>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span>Total Transacciones:</span>
-                  <strong>{{ box.transactions.length }}</strong>
+                  <strong>{{box.transactions.length}}</strong>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
+  
       <div class="card bg-light mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0"><strong>Transacciones</strong></h5>
@@ -72,7 +73,7 @@
               <thead>
                 <tr>
                   <th>Fecha</th>
-                  <th>Tipo</th>  <!-- Nueva columna -->
+                  <th>Tipo</th>
                   <th>Descripción</th>
                   <th class="text-end">Monto</th>
                   <th class="text-end">Saldo Anterior</th>
@@ -87,25 +88,24 @@
                 } @else {
                   @for (transaction of box.transactions; track transaction.id) {
                     <tr>
-                      <td>{{ transaction.transactionDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                      <td>{{transaction.transactionDate | date:'dd/MM/yyyy HH:mm'}}</td>
                       <td>
                         <span class="badge" [ngClass]="{
                           'bg-success': transaction.type === 'income',
                           'bg-danger': transaction.type === 'expense'
                         }">
-                          {{ transaction.type === 'income' ? 'Ingreso' : 'Egreso' }}
+                          {{transaction.type === 'income' ? 'Ingreso' : 'Egreso'}}
                         </span>
                       </td>
-                      <td>{{ transaction.description }}</td>
+                      <td>{{transaction.description}}</td>
                       <td class="text-end fw-bold" [ngClass]="{
                         'text-success': transaction.type === 'income',
                         'text-danger': transaction.type === 'expense'
                       }">
-                        {{ transaction.type === 'income' ? '+' : '-' }}
-                        {{ transaction.amount | currency }}
+                        {{transaction.amount | currency}}
                       </td>
-                      <td class="text-end text-muted">{{ transaction.previousBalance | currency }}</td>
-                      <td class="text-end">{{ transaction.newBalance | currency }}</td>
+                      <td class="text-end">{{transaction.previousBalance | currency}}</td>
+                      <td class="text-end">{{transaction.newBalance | currency}}</td>
                     </tr>
                   }
                 }
@@ -114,7 +114,7 @@
           </div>
         </div>
       </div>
-
+  
       @if (box && box.loans.length > 0) {
         <div class="card bg-light">
           <div class="card-header">
@@ -126,19 +126,19 @@
                 <thead>
                   <tr>
                     <th>Cliente</th>
+                    <th>Fecha</th>
                     <th class="text-end">Monto</th>
-                    <th>Fecha Inicio</th>
-                    <th class="text-end">Saldo Pendiente</th>
+                    <th class="text-end">Estado</th>
                   </tr>
                 </thead>
                 <tbody>
                   @for (loan of box.loans; track loan.id) {
                     <tr>
-                      <td>{{loan.clientName}}</td>
-                      <td class="text-end">{{loan.amount | currency}}</td>
-                      <td>{{loan.startDate | date}}</td>
-                      <td class="text-end">{{loan.remainingBalance | currency}}</td>
-                    </tr>
+                        <td>{{loan.clientName}}</td>
+                        <td class="text-end">{{loan.amount | currency}}</td>
+                        <td>{{loan.startDate | date}}</td>
+                        <td class="text-end">{{loan.remainingBalance | currency}}</td>
+                      </tr>
                   }
                 </tbody>
               </table>
@@ -147,7 +147,4 @@
         </div>
       }
     }
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cerrar</button>
   </div>
