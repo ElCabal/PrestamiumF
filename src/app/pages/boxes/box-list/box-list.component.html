@@ -62,11 +62,11 @@
                                                     <p class="text-sm mb-2">{{box.description}}</p>
                                                     <div class="d-flex justify-content-between mb-2">
                                                         <span>Saldo Inicial:</span>
-                                                        <strong>{{box.initialBalance | currency}}</strong>
+                                                        <strong>{{box.initialBalance | currency:'COP':'symbol-narrow':'1.0-0'}}</strong>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <span>Saldo Actual:</span>
-                                                        <strong>{{box.currentBalance | currency}}</strong>
+                                                        <strong>{{box.currentBalance | currency:'COP':'symbol-narrow':'1.0-0'}}</strong>
                                                     </div>
                                                 </div>
                                                 <div class="icon">
@@ -102,8 +102,8 @@
                                                 <tr>
                                                     <td>{{ box.name }}</td>
                                                     <td>{{ box.description }}</td>
-                                                    <td>{{ box.initialBalance | currency }}</td>
-                                                    <td>{{ box.currentBalance | currency }}</td>
+                                                    <td>{{ box.initialBalance | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                                                    <td>{{ box.currentBalance | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
                                                     <td class="text-center">
                                                         <button class="btn btn-info" (click)="onViewDetails(box)">
                                                             Ver

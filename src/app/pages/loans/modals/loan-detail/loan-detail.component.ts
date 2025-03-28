@@ -12,7 +12,7 @@ import { PaymentAddComponent } from '../payment-add/payment-add.component';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './loan-detail.component.html',
-  styleUrl: './loan-detail.component.scss'
+  styleUrls: ['./loan-detail.component.scss']
 })
 export class LoanDetailComponent {
   private loanService = inject(LoanService);
@@ -61,7 +61,9 @@ export class LoanDetailComponent {
     modalRef.componentInstance.installment = {
       ...installment,
       clientName: this.loan.clientName,
-      installmentNumber: this.loan.installments.indexOf(installment) + 1
+      installmentNumber: this.loan.installments.indexOf(installment) + 1,
+      totalInstallments: this.loan.installments.length,
+      loanId: this.loan.id 
     };
   
     modalRef.result.then(

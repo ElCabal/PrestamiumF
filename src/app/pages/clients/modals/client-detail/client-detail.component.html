@@ -45,12 +45,12 @@
               <div class="mt-5">
                 <div class="d-flex justify-content-between mb-2">
                   <span>Total Prestado:</span>
-                  <strong>{{totalLoaned | currency}}</strong>
+                  <strong>{{totalLoaned | currency:'COP':'symbol-narrow':'1.0-0'}}</strong>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                   <span>Saldo Pendiente:</span>
                   <strong [class.text-danger]="totalPending > 0">
-                    {{totalPending | currency}}
+                    {{totalPending | currency:'COP':'symbol-narrow':'1.0-0'}}
                   </strong>
                 </div>
                 <div class="d-flex justify-content-between">
@@ -90,9 +90,9 @@
                   @for (loan of loans; track loan.id) {
                     <tr>
                       <td>{{loan.startDate | date}}</td>
-                      <td class="text-end">{{loan.amount | currency}}</td>
+                      <td class="text-end">{{loan.amount | currency:'COP':'symbol-narrow':'1.0-0'}}</td>
                       <td class="text-end">{{loan.fees}}</td>
-                      <td class="text-end">{{loan.remainingBalance | currency}}</td>
+                      <td class="text-end">{{loan.remainingBalance | currency:'COP':'symbol-narrow':'1.0-0'}}</td>
                       <td>
                         <span class="badge" 
                               [class.bg-success]="loan.remainingBalance === 0"

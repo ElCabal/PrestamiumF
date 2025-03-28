@@ -16,7 +16,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgSelectModule
   ],
   templateUrl: './payment-add.component.html',
-  styleUrl: './payment-add.component.scss'
+  styleUrls: ['./payment-add.component.scss']
 })
 export class PaymentAddComponent {
   private fb = inject(FormBuilder);
@@ -30,6 +30,8 @@ export class PaymentAddComponent {
   boxes: any[] = [];
   loading = false;
   submitted = false;
+  remainingBalance: number = 0;
+  maxPaymentAmount: number = 0;
 
   paymentForm: FormGroup = this.fb.group({
     boxId: ['', [Validators.required]],
@@ -42,13 +44,7 @@ export class PaymentAddComponent {
 
   ngOnInit() {
     this.loadBoxes();
-    this.calculateLateFees();
-    
-    // Establecer el monto por defecto (cuota + mora)
-    const totalAmount = this.installment.amount + this.lateFees;
-    this.paymentForm.patchValue({
-      amount: totalAmount
-    });
+    this.getRemainingBalance();
   }
 
   loadBoxes() {
@@ -62,20 +58,90 @@ export class PaymentAddComponent {
     });
   }
 
+  getRemainingBalance() {
+    // Obtener el saldo pendiente del préstamo
+    if (this.installment && this.installment.loanId) {
+      this.loanService.getLoanById(this.installment.loanId).subscribe({
+        next: response => {
+          if (response.success && response.data) {
+            this.remainingBalance = response.data.remainingBalance;
+            
+            // Una vez que tenemos el saldo pendiente, calculamos la mora
+            this.calculateLateFees();
+            
+            // Actualizar validadores del formulario con el saldo pendiente
+            this.updateAmountValidators();
+          }
+        },
+        error: error => {
+          console.error('Error loading loan details:', error);
+          this.alertService.error('Error al cargar los detalles del préstamo');
+        }
+      });
+    } else {
+      console.error('No se pudo obtener el ID del préstamo');
+      this.alertService.error('Error: No se pudo obtener el ID del préstamo');
+      this.activeModal.dismiss();
+    }
+  }
+
   calculateLateFees() {
-    if (new Date() > new Date(this.installment.dueDate)) {
+    if (this.installment && this.installment.id && new Date() > new Date(this.installment.dueDate)) {
       this.loanService.calculateLateFees(this.installment.id, new Date()).subscribe({
         next: response => {
           if (response.success) {
             this.lateFees = response.data ?? 0;
-            // Actualizar el monto del formulario
-            const totalAmount = this.installment.amount + this.lateFees;
-            this.paymentForm.patchValue({
-              amount: totalAmount
-            });
+            
+            // Calcular el monto máximo que se puede pagar (cuota + mora)
+            this.calculateMaxPaymentAmount();
           }
+        },
+        error: error => {
+          console.error('Error calculating late fees:', error);
+          // Si hay error al calcular la mora, continuamos con el proceso
+          this.calculateMaxPaymentAmount();
         }
       });
+    } else {
+      // Si no hay mora, calculamos directamente el monto máximo
+      this.calculateMaxPaymentAmount();
+    }
+  }
+
+  calculateMaxPaymentAmount() {
+    // Si el saldo pendiente es 0, no permitimos ningún pago
+    if (this.remainingBalance <= 0) {
+      this.maxPaymentAmount = 0;
+      this.alertService.warning('Este préstamo ya está completamente pagado');
+      setTimeout(() => this.activeModal.dismiss(), 2000);
+      return;
+    }
+    
+    // El monto máximo para esta cuota es el menor entre:
+    // 1. El monto de la cuota + mora (si aplica)
+    // 2. El saldo pendiente total del préstamo
+    const installmentWithFees = this.installment.amount + this.lateFees;
+    this.maxPaymentAmount = Math.min(installmentWithFees, this.remainingBalance);
+    
+    // Actualizar el monto del formulario con el valor calculado
+    this.paymentForm.patchValue({
+      amount: this.installment.amount // Establecemos por defecto el monto de la cuota sin mora
+    });
+    
+    // Actualizar validadores del formulario
+    this.updateAmountValidators();
+  }
+
+  updateAmountValidators() {
+    const amountControl = this.paymentForm.get('amount');
+    if (amountControl) {
+      // Establecer el validador de monto máximo
+      amountControl.setValidators([
+        Validators.required,
+        Validators.min(0.01),
+        Validators.max(this.maxPaymentAmount || 0.01) // Si maxPaymentAmount es 0, usamos 0.01 para evitar errores
+      ]);
+      amountControl.updateValueAndValidity();
     }
   }
 
@@ -83,6 +149,19 @@ export class PaymentAddComponent {
     this.submitted = true;
 
     if (this.paymentForm.invalid) {
+      return;
+    }
+
+    // Validar que el monto no exceda el saldo pendiente
+    const amount = this.paymentForm.value.amount;
+    if (amount > this.remainingBalance) {
+      this.alertService.error(`El monto del pago (${amount.toLocaleString('es-CO', {style: 'currency', currency: 'COP', minimumFractionDigits: 0})} ) excede el saldo pendiente (${this.remainingBalance.toLocaleString('es-CO', {style: 'currency', currency: 'COP', minimumFractionDigits: 0})} )`);
+      return;
+    }
+
+    // Validar que el monto no exceda la cuota más la mora
+    if (amount > this.maxPaymentAmount) {
+      this.alertService.error(`El monto del pago (${amount.toLocaleString('es-CO', {style: 'currency', currency: 'COP', minimumFractionDigits: 0})} ) excede el monto máximo permitido (${this.maxPaymentAmount.toLocaleString('es-CO', {style: 'currency', currency: 'COP', minimumFractionDigits: 0})} )`);
       return;
     }
 

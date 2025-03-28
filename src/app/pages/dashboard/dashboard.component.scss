@@ -1,0 +1,53 @@
+// Estilos para las tarjetas del dashboard
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+}
+
+// Estilos para los iconos en las tarjetas
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    opacity: 0.7;
+  }
+}
+
+// Estilos para las tablas
+.table {
+  th {
+    font-weight: 600;
+  }
+  
+  tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+// Estilos para los botones de acción
+.btn-info {
+  color: white;
+}
+
+// Estilos responsivos
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 20px;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
