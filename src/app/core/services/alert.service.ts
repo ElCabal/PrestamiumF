@@ -26,6 +26,16 @@ export class AlertService {
     });
   }
 
+  warning(message: string) {
+    return Swal.fire({
+      title: 'Advertencia',
+      text: message,
+      icon: 'warning',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#ffc107'
+    });
+  }
+
   confirm(title: string, text: string) {
     return Swal.fire({
       title,

@@ -1,83 +1,94 @@
 <div class="modal-header">
-    <h4 class="modal-title">Registrar Pago</h4>
-    <button type="button" class="close" (click)="activeModal.dismiss()">
-      <span>&times;</span>
-    </button>
+  <h4 class="modal-title">Registrar Pago</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <div class="info-label">Cliente:</div>
+      <div class="info-value">{{ installment.clientName }}</div>
+    </div>
+    <div class="col-md-6">
+      <div class="info-label">Cuota:</div>
+      <div class="info-value">{{ installment.installmentNumber }} de {{ installment.totalInstallments || '?' }}</div>
+    </div>
   </div>
-  <div class="modal-body">
-    <div class="card mb-3">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <p class="mb-1"><strong>Cliente:</strong> {{installment.clientName}}</p>
-            <p class="mb-1"><strong>Cuota:</strong> #{{installment.installmentNumber}}</p>
-            <p class="mb-0"><strong>Fecha Vencimiento:</strong> {{installment.dueDate | date}}</p>
-          </div>
-          <div class="col-md-6">
-            <p class="mb-1"><strong>Monto Cuota:</strong> {{installment.amount | currency}}</p>
-            @if (lateFees > 0) {
-              <p class="mb-1 text-danger">
-                <strong>Mora:</strong> {{lateFees | currency}}
-              </p>
-              <p class="mb-0">
-                <strong>Total a Pagar:</strong> {{installment.amount + lateFees | currency}}
-              </p>
-            }
-          </div>
-        </div>
+  
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <div class="info-label">Monto de Cuota:</div>
+      <div class="info-value">{{ installment.amount | currency:'COP':'symbol':'1.0-0' }}</div>
+    </div>
+    <div class="col-md-6">
+      <div class="info-label">Fecha Vencimiento:</div>
+      <div class="info-value">{{ installment.dueDate | date:'dd/MM/yyyy' }}</div>
+    </div>
+  </div>
+  
+  <div class="row mb-3" *ngIf="lateFees > 0">
+    <div class="col-md-6">
+      <div class="info-label">Mora:</div>
+      <div class="info-value text-danger">{{ lateFees | currency:'COP':'symbol':'1.0-0' }}</div>
+    </div>
+    <div class="col-md-6">
+      <div class="info-label">Total a Pagar:</div>
+      <div class="info-value">{{ installment.amount + lateFees | currency:'COP':'symbol':'1.0-0' }}</div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="info-label">Saldo Pendiente del Préstamo:</div>
+      <div class="info-value fw-bold">{{ remainingBalance | currency:'COP':'symbol':'1.0-0' }}</div>
+      <small class="text-muted">Monto total pendiente por pagar de todas las cuotas</small>
+    </div>
+  </div>
+  
+  <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="boxId" class="form-label">Caja</label>
+      <ng-select 
+        [items]="boxes" 
+        bindLabel="name" 
+        bindValue="id" 
+        placeholder="Seleccione una caja"
+        formControlName="boxId"
+        [ngClass]="{ 'is-invalid': submitted && f['boxId'].errors }"
+      ></ng-select>
+      <div *ngIf="submitted && f['boxId'].errors" class="invalid-feedback">
+        <div *ngIf="f['boxId'].errors['required']">La caja es requerida</div>
       </div>
     </div>
-
-    <form [formGroup]="paymentForm">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label class="form-label">Caja <span class="text-danger">*</span></label>
-            <ng-select
-              [items]="boxes"
-              bindLabel="name"
-              bindValue="id"
-              placeholder="Buscar caja..."
-              formControlName="boxId"
-              [clearable]="false"
-              [loading]="loading"
-              [ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
-              <ng-template ng-option-tmp let-item="item">
-                {{item.name}} - Saldo: {{item.currentBalance | currency}}
-              </ng-template>
-            </ng-select>
-            @if (submitted && f['boxId'].errors) {
-              <div class="invalid-feedback">
-                Seleccione una caja
-              </div>
-            }
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="form-group mb-3">
-            <label class="form-label">Monto <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text">$</span>
-              <input type="number" class="form-control" formControlName="amount"
-                     [ngClass]="{'is-invalid': submitted && f['amount'].errors}">
-            </div>
-            <div class="invalid-feedback" *ngIf="submitted && f['amount'].errors">
-              El monto debe ser mayor a 0
-            </div>
-          </div>
-        </div>
+    
+    <div class="mb-3">
+      <label for="amount" class="form-label">Monto a Pagar</label>
+      <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input 
+          type="number" 
+          class="form-control" 
+          formControlName="amount"
+          [ngClass]="{ 'is-invalid': submitted && f['amount'].errors }"
+          step="0.01"
+          min="0.01"
+          [max]="remainingBalance"
+        >
       </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" 
-            (click)="onSubmit()" [disabled]="loading">
-      <span class="spinner-border spinner-border-sm me-1" *ngIf="loading"></span>
-      Registrar Pago
-    </button>
-    <button type="button" class="btn btn-secondary" 
-            (click)="activeModal.dismiss()" [disabled]="loading">
-      Cancelar
-    </button>
-  </div>
+      <div *ngIf="submitted && f['amount'].errors" class="invalid-feedback d-block">
+        <div *ngIf="f['amount'].errors['required']">El monto es requerido</div>
+        <div *ngIf="f['amount'].errors['min']">El monto debe ser mayor a 0</div>
+        <div *ngIf="f['amount'].errors['max']">El monto no puede exceder {{ maxPaymentAmount | currency:'COP':'symbol':'1.0-0' }}</div>
+      </div>
+      <small class="form-text text-muted">
+        Monto máximo para esta cuota: {{ maxPaymentAmount | currency:'COP':'symbol':'1.0-0' }}
+      </small>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="loading">
+    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+    Registrar Pago
+  </button>
+</div>
