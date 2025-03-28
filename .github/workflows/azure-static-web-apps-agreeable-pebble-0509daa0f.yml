@@ -23,13 +23,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
+      
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       
       - name: Install Angular CLI
         run: npm install -g @angular/cli
       
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
       
       - name: Build Frontend
         run: ng build --configuration production
@@ -46,6 +54,7 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "dist/prestamium-f" # Built app content directory - optional
+          skip_app_build: true # Skip build step since we already built the app
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
