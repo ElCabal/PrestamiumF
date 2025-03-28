@@ -82,10 +82,29 @@ export class LoanAddComponent {
     });
   }
 
+  validateBoxBalance() {
+    const boxId = this.loanForm.get('boxId')?.value;
+    const amount = this.loanForm.get('amount')?.value;
+    
+    if (boxId && amount) {
+      const selectedBox = this.boxes.find(box => box.id === boxId);
+      if (selectedBox && selectedBox.currentBalance < amount) {
+        this.alertService.warning(`La caja seleccionada tiene un saldo insuficiente (${selectedBox.currentBalance}). El préstamo no podrá ser procesado.`);
+        return false;
+      }
+    }
+    return true;
+  }
+
   onSubmit() {
     this.submitted = true;
 
     if (this.loanForm.invalid) {
+      return;
+    }
+
+    // Validar saldo de la caja antes de enviar
+    if (!this.validateBoxBalance()) {
       return;
     }
 
@@ -100,7 +119,9 @@ export class LoanAddComponent {
       },
       error: (error) => {
         console.error('Error:', error);
-        this.alertService.error('Error al crear el préstamo');
+        // Mostrar el mensaje específico del backend si está disponible
+        const errorMessage = error.error?.errorMessage || 'Error al crear el préstamo';
+        this.alertService.error(errorMessage);
       },
       complete: () => {
         this.loading = false;

@@ -32,9 +32,10 @@ export class PaymentAddComponent {
   submitted = false;
   remainingBalance: number = 0;
   maxPaymentAmount: number = 0;
+  loanBoxId: number | null = null; // ID de la caja del préstamo original
 
   paymentForm: FormGroup = this.fb.group({
-    boxId: ['', [Validators.required]],
+    boxId: [{value: '', disabled: false}, [Validators.required]],
     amount: ['', [Validators.required, Validators.min(0.01)]]
   });
 
@@ -65,6 +66,14 @@ export class PaymentAddComponent {
         next: response => {
           if (response.success && response.data) {
             this.remainingBalance = response.data.remainingBalance;
+            
+            // Guardar el ID de la caja del préstamo y preseleccionarla
+            this.loanBoxId = response.data.boxId;
+            if (this.loanBoxId) {
+              // Preseleccionar la caja y deshabilitarla
+              this.paymentForm.get('boxId')?.setValue(this.loanBoxId);
+              this.paymentForm.get('boxId')?.disable();
+            }
             
             // Una vez que tenemos el saldo pendiente, calculamos la mora
             this.calculateLateFees();
@@ -166,9 +175,16 @@ export class PaymentAddComponent {
     }
 
     this.loading = true;
+    
+    // Crear objeto de pago con el boxId del formulario (que puede estar deshabilitado)
+    const paymentData = {
+      amount: this.paymentForm.get('amount')?.value,
+      boxId: this.paymentForm.get('boxId')?.value || this.loanBoxId
+    };
+    
     this.loanService.registerInstallmentPayment(
       this.installment.id,
-      this.paymentForm.value
+      paymentData
     ).subscribe({
       next: (response) => {
         if (response.success) {

@@ -50,9 +50,13 @@
 				formControlName="boxId"
 				[clearable]="false"
 				[loading]="loading"
+				(change)="validateBoxBalance()"
 				[ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
 				<ng-template ng-option-tmp let-item="item">
 				  {{item.name}} - Saldo: {{item.currentBalance | currency:'COP':'symbol-narrow':'1.0-0'}}
+				  @if(item.currentBalance < loanForm.get('amount')?.value && loanForm.get('amount')?.value > 0) {
+					<span class="badge bg-danger ms-2">Saldo insuficiente</span>
+				  }
 				</ng-template>
 			  </ng-select>
 			  @if (submitted && f['boxId'].errors) {
@@ -74,6 +78,7 @@
 					<span class="input-group-text">$</span>
 				</div>
 				<input type="number" class="form-control" formControlName="amount"
+					   (change)="validateBoxBalance()"
 					   [ngClass]="{'is-invalid': submitted && f['amount'].errors}">
 			  </div>
 			  <div class="invalid-feedback" *ngIf="submitted && f['amount'].errors">
