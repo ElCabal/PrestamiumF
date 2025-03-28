@@ -50,16 +50,16 @@
                     @for (loan of loans; track loan.id) {
                       <tr>
                         <td>{{ loan.clientName }}</td>
-                        <td class="text-end">{{ loan.amount | currency }}</td>
+                        <td class="text-end">{{ loan.amount | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
                         <td class="text-end">{{ loan.fees }}</td>
                         <td>{{ loan.frequency === 'monthly' ? 'Mensual' : 'Quincenal' }}</td>
                         <td class="text-end" [ngClass]="{
                           'text-success': loan.remainingBalance === 0,
                           'text-danger': loan.remainingBalance > 0
                         }">
-                          {{ loan.remainingBalance | currency }}
+                          {{ loan.remainingBalance | currency:'COP':'symbol-narrow':'1.0-0' }}
                         </td>
-                        <td>{{ loan.startDate | date }}</td>
+                        <td>{{ loan.startDate | date:'dd/MM/yyyy' }}</td>
                         <td>
                           <button class="btn btn-info me-1 mr-2" (click)="onViewDetails(loan)">
                             <i class="fas fa-eye"></i>
