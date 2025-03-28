@@ -59,7 +59,11 @@ export class LoanAddComponent {
     this.clientService.getAllClients().subscribe({
       next: response => {
         if (response.success) {
-          this.clients = response.data ?? [];
+          // Agregar propiedad fullName a cada cliente
+          this.clients = (response.data ?? []).map(client => ({
+            ...client,
+            fullName: `${client.firstName} ${client.lastName}`
+          }));
         }
       },
       error: error => console.error('Error loading clients:', error),

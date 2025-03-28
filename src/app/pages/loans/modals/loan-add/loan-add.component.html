@@ -52,7 +52,7 @@
 				[loading]="loading"
 				[ngClass]="{'is-invalid': submitted && f['boxId'].errors}">
 				<ng-template ng-option-tmp let-item="item">
-				  {{item.name}} - Saldo: {{item.currentBalance | currency}}
+				  {{item.name}} - Saldo: {{item.currentBalance | currency:'COP':'symbol-narrow':'1.0-0'}}
 				</ng-template>
 			  </ng-select>
 			  @if (submitted && f['boxId'].errors) {
