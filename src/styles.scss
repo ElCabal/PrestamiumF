@@ -81,3 +81,82 @@ ngb-modal-backdrop.modal-backdrop {
     border-color: #dc3545;
   }
 }
+
+// Transiciones para cambios de tema
+body, .content-wrapper, .card, .modal-content, .form-control, .table {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Estilos para modo oscuro
+.dark-mode {
+  // Estos estilos se aplicarán automáticamente a los componentes de AdminLTE
+  // cuando se agrega la clase 'dark-mode' al body
+
+  // Personalizaciones adicionales para la aplicación
+  .content-wrapper {
+    background-color: #343a40;
+    color: #fff;
+  }
+
+  .card {
+    background-color: #454d55;
+    color: #fff;
+  }
+
+  .modal-content {
+    background-color: #454d55;
+    color: #fff;
+  }
+
+  .form-control {
+    background-color: #3f474e;
+    color: #fff;
+    border-color: #6c757d;
+    
+    &:focus {
+      background-color: #4b545c;
+    }
+  }
+
+  // Personalización para ng-select en modo oscuro
+  .ng-select {
+    .ng-select-container {
+      background-color: #3f474e;
+      color: #fff;
+      border-color: #6c757d;
+    }
+
+    .ng-dropdown-panel {
+      background-color: #454d55;
+      color: #fff;
+      
+      .ng-dropdown-panel-items {
+        .ng-option {
+          background-color: #454d55;
+          color: #fff;
+          
+          &.ng-option-marked {
+            background-color: #3f474e;
+          }
+          
+          &.ng-option-selected {
+            background-color: #007bff;
+          }
+        }
+      }
+    }
+  }
+
+  // Tablas en modo oscuro
+  .table {
+    color: #fff;
+    
+    thead th {
+      border-color: #6c757d;
+    }
+    
+    tbody td {
+      border-color: #6c757d;
+    }
+  }
+}

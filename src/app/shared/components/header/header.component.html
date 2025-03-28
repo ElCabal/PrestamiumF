@@ -10,6 +10,12 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+        <!-- Dark Mode Toggle Button -->
+        <li class="nav-item">
+            <a class="nav-link" role="button" (click)="toggleDarkMode()">
+                <i class="fas" [ngClass]="isDarkMode ? 'fa-sun' : 'fa-moon'"></i>
+            </a>
+        </li>
         <!-- Fullscreen Button -->
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" role="button">
