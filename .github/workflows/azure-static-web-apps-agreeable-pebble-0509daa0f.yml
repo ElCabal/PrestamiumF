@@ -21,17 +21,11 @@ jobs:
           lfs: false
           
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
       
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # Eliminamos el paso de caché que estaba causando problemas
       
       - name: Install Angular CLI
         run: npm install -g @angular/cli
